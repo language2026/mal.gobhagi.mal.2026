@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제보 안내</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            background-color: #ff8c00;
+            color: #f5f5f0;
+            padding: 20px;
+            line-height: 1.8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 메인 콘텐츠 */
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        h1, p, .email-link {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        h1 {
+            margin-bottom: 40px;
+        }
+
+        h1 .italic {
+            font-style: italic;
+        }
+
+        p {
+            margin-bottom: 40px;
+            word-break: keep-all;
+        }
+
+        .email-link {
+            display: inline-block;
+            color: #f5f5f0;
+            text-decoration: underline;
+            padding: 12px 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .email-link:hover {
+            opacity: 0.7;
+        }
+
+        .email-link:active {
+            opacity: 0.5;
+        }
+
+        /* 타이핑 효과 */
+        .typing {
+            opacity: 0;
+        }
+
+        .typing.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 15px;
+            }
+
+            h1 {
+                margin-bottom: 30px;
+            }
+
+            p {
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="typing" id="title"></h1>
+        
+        <p class="typing" id="description"></p>
+        
+        <a href="mailto:mal.gobhagi.mal@gmail.com" class="typing" id="email"></a>
+    </div>
+
+    <script>
+        // 타이핑 효과 함수
+        function typeWriter(element, plainText, speed, callback, italicWord) {
+            let i = 0;
+            element.classList.add('show');
+
+            function render(text) {
+                if (italicWord && text.includes(italicWord)) {
+                    let parts = text.split(italicWord);
+                    element.innerHTML = parts[0] + '<span class="italic">' + italicWord + '</span>' + parts[1];
+                } else {
+                    element.textContent = text;
+                }
+            }
+
+            function type() {
+                if (i <= plainText.length) {
+                    render(plainText.substring(0, i));
+                    i++;
+                    setTimeout(type, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            type();
+        }
+
+        // 3초 후 타이핑 시작
+        setTimeout(() => {
+            const title = document.getElementById('title');
+            const description = document.getElementById('description');
+            const email = document.getElementById('email');
+
+            const titleText = '당신은 제보자 입니다.';
+            const descText = '(실행자 / 기록자) 를 관찰하고 (이름 / 별명) 중 하나를 기입한 뒤 아래의 이메일로 관찰한 내용을 제보하십시오.';
+            const emailText = 'mal.gobhagi.mal@gmail.com';
+
+            // 제목 타이핑 (80ms 간격)
+            typeWriter(title, titleText, 80, () => {
+                // 제목 완료 후 0.3초 뒤 본문 타이핑 (50ms 간격)
+                setTimeout(() => {
+                    typeWriter(description, descText, 50, () => {
+                        // 본문 완료 후 0.3초 뒤 이메일 타이핑 (60ms 간격)
+                        setTimeout(() => {
+                            typeWriter(email, emailText, 60);
+                        }, 300);
+                    });
+                }, 300);
+            }, '제보자');
+        }, 3000);
+    </script>
+</body>
+</html>
